@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -72,13 +72,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+env = environ.Env()
+environ.Env.read_env()
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bh_sql',  # 数据库名
         'USER': 'root',     # MySQL 用户名
-        'PASSWORD': 'sora2530',   # MySQL 密码
+        'PASSWORD': env('DB_PASSWORD'),   # MySQL 密码
         'HOST': 'localhost',           # 通常为 localhost 或 127.0.0.1
         'PORT': '3306',               # 默认 3306
         'OPTIONS': {
