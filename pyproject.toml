@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "django-backend"
+name = "django_backend"
 version = "0.1.0"
 description = ""
 authors = ["Sora <7641501+ryunosukeakasaka@user.noreply.gitee.com>"]
@@ -7,10 +7,11 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = "<4, >=3.11"
 django = "^5.2"
 mysqlclient = "^2.2.7"
 setuptools = "^78.1.0"
+django-environ = "0.12.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
