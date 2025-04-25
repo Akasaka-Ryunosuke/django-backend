@@ -14,6 +14,7 @@ class GlobalException(Exception):
     def to_response(self) -> JsonResponse:
         """将异常转换为响应对象"""
         payload = {
+            "success": False,
             "code": self.code,
             "message": self.message
         }
