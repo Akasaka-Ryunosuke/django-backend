@@ -4,105 +4,96 @@ from django.forms.models import model_to_dict
 from utils.result import ok
 from utils.exceptions import GlobalException, StatusCodeEnum
 from utils.paginator import MyPaginator
+from rest_framework.decorators import api_view
 
 
 @csrf_exempt
+@api_view(['POST'])
 def code_info_create(request):
     """
     创建 CodeInfo 记录
     """
-    if request.method == 'POST':
-        try:
-            data = request.POST.dict()
-            code_info = create_code_info(data)
-            return ok(model_to_dict(code_info))
-        except Exception:
-            raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
-    else:
-        raise GlobalException(StatusCodeEnum.METHOD_ERR)
+    try:
+        data = request.data
+        code_info = create_code_info(data)
+        return ok(model_to_dict(code_info))
+    except Exception:
+        raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
 
 
 @csrf_exempt
+@api_view(['DELETE'])
 def code_info_delete(request):
     """
     通过 code_id 删除 CodeInfo 记录
     """
-    if request.method == 'DELETE':
-        try:
-            code_id = request.GET.get('code_id')
-            if not code_id:
-                raise GlobalException(StatusCodeEnum.PARAM_ERR)
-            delete_code_info(code_id=int(code_id))
-            return ok()
-        except Exception:
-            raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
-    else:
-        raise GlobalException(StatusCodeEnum.METHOD_ERR)
+    try:
+        code_id = request.GET.get('code_id')
+        if not code_id:
+            raise GlobalException(StatusCodeEnum.PARAM_ERR)
+        delete_code_info(code_id=int(code_id))
+        return ok()
+    except Exception:
+        raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
 
 
 @csrf_exempt
+@api_view(['PUT'])
 def code_info_update(request):
     """
     更新 CodeInfo 记录
     """
-    if request.method == 'PUT':
-        try:
-            data = request.POST
-            code_id = request.GET.get('code_id')
-            if not code_id:
-                raise GlobalException(StatusCodeEnum.PARAM_ERR)
-            updates = {
-                "user_id": data.get("user_id"),
-                "question_id": data.get("question_id"),
-                "code_raw": data.get("code_raw"),
-                "code_type": data.get("code_type"),
-                "score": data.get("score"),
-                "run_time": data.get("run_time"),
-                "upload_time": data.get("upload_time")
-            }
-            update_code_info(code_id=int(code_id), updates=updates)
-            code_info = get_code_info(code_id)
-            return ok(model_to_dict(code_info))
-        except Exception:
-            raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
-    else:
-        raise GlobalException(StatusCodeEnum.METHOD_ERR)
+    try:
+        data = request.POST
+        code_id = request.GET.get('code_id')
+        if not code_id:
+            raise GlobalException(StatusCodeEnum.PARAM_ERR)
+        updates = {
+            "user_id": data.get("user_id"),
+            "question_id": data.get("question_id"),
+            "code_raw": data.get("code_raw"),
+            "code_type": data.get("code_type"),
+            "score": data.get("score"),
+            "run_time": data.get("run_time"),
+            "upload_time": data.get("upload_time")
+        }
+        update_code_info(code_id=int(code_id), updates=updates)
+        code_info = get_code_info(code_id)
+        return ok(model_to_dict(code_info))
+    except Exception:
+        raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
 
 
 @csrf_exempt
+@api_view(['GET'])
 def code_info_get(request):
     """
     查询 CodeInfo 记录
     """
-    if request.method == 'GET':
-        try:
-            code_id = request.GET.get('code_id')
-            if not code_id:
-                raise GlobalException(StatusCodeEnum.PARAM_ERR)
-            code_info = get_code_info(code_id=int(code_id))
-            return ok(model_to_dict(code_info))
-        except Exception:
-            raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
-    else:
-        raise GlobalException(StatusCodeEnum.METHOD_ERR)
+    try:
+        code_id = request.GET.get('code_id')
+        if not code_id:
+            raise GlobalException(StatusCodeEnum.PARAM_ERR)
+        code_info = get_code_info(code_id=int(code_id))
+        return ok(model_to_dict(code_info))
+    except Exception:
+        raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
 
 
 @csrf_exempt
+@api_view(['GET'])
 def code_info_list(request):
     """
     查询 CodeInfo 记录并支持分页
     """
-    if request.method == 'GET':
-        try:
-            filters = {key: value for key, value in request.GET.items() if key not in ['page', 'page_size']}
-            page = request.GET.get('page', 1)
-            page_size = request.GET.get('page_size', 10)
+    try:
+        filters = {key: value for key, value in request.GET.items() if key not in ['page', 'page_size']}
+        page = request.GET.get('page', 1)
+        page_size = request.GET.get('page_size', 10)
 
-            filtered_code_info = list_code_info(**filters)
-            paginator = MyPaginator(filtered_code_info, page, page_size)
-            return ok(paginator.to_response())
+        filtered_code_info = list_code_info(**filters)
+        paginator = MyPaginator(filtered_code_info, page, page_size)
+        return ok(paginator.to_response())
 
-        except Exception:
-            raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
-    else:
-        raise GlobalException(StatusCodeEnum.METHOD_ERR)
+    except Exception:
+        raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
