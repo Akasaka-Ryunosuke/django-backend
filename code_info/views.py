@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from .services import create_code_info, get_code_info, update_code_info, delete_code_info
+from .services import create_code_info, get_code_info, update_code_info, delete_code_info, list_code_info
 from django.forms.models import model_to_dict
 from utils.result import ok
 from utils.exceptions import GlobalException, StatusCodeEnum
@@ -98,7 +98,7 @@ def code_info_list(request):
             page = request.GET.get('page', 1)
             page_size = request.GET.get('page_size', 10)
 
-            filtered_code_info = get_code_info(**filters)
+            filtered_code_info = list_code_info(**filters)
             paginator = MyPaginator(filtered_code_info, page, page_size)
             return ok(paginator.to_response())
 
