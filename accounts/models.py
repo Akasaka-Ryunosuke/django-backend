@@ -10,7 +10,7 @@ class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=255, unique=True)
     user_password = models.CharField(max_length=255)
-    user_type = models.CharField(max_length=255, choices=USER_TYPES)
+    user_type = models.CharField(max_length=255, choices=USER_TYPES, default='user')
 
     objects = models.Manager()
 

@@ -13,6 +13,9 @@ class StatusCodeEnum(Enum):
     PASSWORD_WRONG_ERR = (3, 400, '密码错误')
     USER_EXIST_ERR = (4, 400, '用户名已存在')
     USER_NOT_EXIST_ERR = (5, 400, '用户不存在')
+    PARAM_ERR = (6, 400, '参数错误')
+    ACCOUNT_ERR = (10, 400, '账号错误')
+    CODE_INFO_ERR = (11, 400, '代码信息错误')
 
     @property
     def code(self):
@@ -28,4 +31,3 @@ class StatusCodeEnum(Enum):
     def errmsg(self):
         """获取状态码信息"""
         return self.value[2]
-
