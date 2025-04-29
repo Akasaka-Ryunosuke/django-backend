@@ -14,6 +14,7 @@ class StatusCodeEnum(Enum):
     USER_EXIST_ERR = (4, 400, '用户名已存在')
     USER_NOT_EXIST_ERR = (5, 400, '用户不存在')
     PARAM_ERR = (6, 400, '参数错误')
+    TOKEN_ERR = (6, 401, '无效的Token')
     ACCOUNT_ERR = (10, 400, '账号错误')
     CODE_INFO_ERR = (11, 400, '代码信息错误')
 

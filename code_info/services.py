@@ -3,6 +3,7 @@ from typing import Dict
 from django.db import transaction
 from .models import CodeInfo
 from django.db.models import QuerySet
+from django.db.models import Q
 
 
 def create_code_info(data: Dict) -> CodeInfo:
@@ -67,6 +68,17 @@ def list_code_info(**kwargs) -> QuerySet:
     :return: QuerySet 对象
     """
     try:
-        return CodeInfo.objects.filter(**kwargs)
+        query = Q()
+        for key, value in kwargs.items():
+            if key == 'code_type' and isinstance(value, list):
+                # 处理 type 多选（OR 条件）
+                type_query = Q()
+                for t in value:
+                    type_query |= Q(code_type=t)
+                query &= type_query
+            else:
+                # 其他条件（AND 条件）
+                query &= Q(**{key: value})
+        return CodeInfo.objects.filter(query)
     except Exception as e:
         raise ValueError(f"Failed to retrieve CodeInfo: {e}")

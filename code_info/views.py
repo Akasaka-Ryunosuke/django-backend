@@ -44,7 +44,7 @@ def code_info_update(request):
     更新 CodeInfo 记录
     """
     try:
-        data = request.POST
+        data = request.data
         code_id = request.GET.get('code_id')
         if not code_id:
             raise GlobalException(StatusCodeEnum.PARAM_ERR)
@@ -87,13 +87,27 @@ def code_info_list(request):
     查询 CodeInfo 记录并支持分页
     """
     try:
-        filters = {key: value for key, value in request.GET.items() if key not in ['page', 'page_size']}
-        page = request.GET.get('page', 1)
-        page_size = request.GET.get('page_size', 10)
+        # 1. 提取分页参数
+        page = int(request.GET.get('page', 1))
+        page_size = int(request.GET.get('page_size', 10))
 
+        # 2. 处理筛选参数
+        filters = {}
+        for key, value in request.GET.lists():  # 使用lists()获取所有值
+            if key in ['page', 'page_size']:
+                continue  # 跳过分页参数
+
+            if key == 'code_type':
+                # code_type 直接使用列表形式
+                filters[key] = value
+            else:
+                # 其他参数取第一个值（或根据需求调整）
+                filters[key] = value[0] if value else None
+
+        # 3. 查询数据
         filtered_code_info = list_code_info(**filters)
         paginator = MyPaginator(filtered_code_info, page, page_size)
         return ok(paginator.to_response())
 
-    except Exception:
+    except Exception as e:
         raise GlobalException(StatusCodeEnum.CODE_INFO_ERR)
