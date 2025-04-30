@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+from utils.result import ok
 from .services import create_question_info, get_question_info, update_question_info, delete_question_info
 
 @csrf_exempt
@@ -29,7 +31,7 @@ def question_info_list(request):
             question_records = get_question_info(**filters)
             data = [{"question_id": record.question_id, "question_raw": record.question_raw,
                      "checkpoints_count": record.checkpoints_count} for record in question_records]
-            return JsonResponse({"status": "success", "data": data})
+            return ok(data[0])
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
