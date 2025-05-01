@@ -17,6 +17,7 @@ class StatusCodeEnum(Enum):
     TOKEN_ERR = (6, 401, '无效的Token')
     ACCOUNT_ERR = (10, 400, '账号错误')
     CODE_INFO_ERR = (11, 400, '代码信息错误')
+    QUESTION_INFO_ERR = (12, 400, '题目信息错误')
 
     @property
     def code(self):

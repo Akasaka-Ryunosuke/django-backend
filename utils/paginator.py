@@ -26,7 +26,12 @@ class MyPaginator:
         paginator = Paginator(self.queryset, self.page_size)
         try:
             page = paginator.page(self.page)
-            data = [model_to_dict(obj) for obj in page]
+            data = []
+            for obj in page:
+                if isinstance(obj, dict):
+                    data.append(obj)
+                else:
+                    data.append(model_to_dict(obj))
         except EmptyPage:
             data = []
 

@@ -1,4 +1,6 @@
 from django.db import transaction
+from django.db.models import QuerySet, Q
+
 from .models import QuestionInfo
 
 def create_question_info(question_id, question_raw=None, checkpoints_count=None):
@@ -49,3 +51,32 @@ def delete_question_info(**kwargs):
         return QuestionInfo.objects.filter(**kwargs).delete()
     except Exception as e:
         raise ValueError(f"Failed to delete QuestionInfo: {e}")
+
+
+def list_problem(**kwargs):
+    try:
+        query = Q()
+        for key, value in kwargs.items():
+            lookup_suffix = '__icontains'
+            lookup = f"{key}{lookup_suffix}"
+            query &= Q(**{lookup: value})
+
+        results = QuestionInfo.objects.filter(query)
+
+        enriched_results = []
+        for q in results:
+            first_line = q.question_raw.strip().splitlines()[0]
+            if first_line.startswith('#'):
+                problem_name = first_line.lstrip('#').strip()
+            else:
+                problem_name = '未知标题'
+            enriched_results.append({
+                'question_id': q.question_id,
+                'question_name': problem_name,
+            })
+
+        return enriched_results
+
+    except Exception as e:
+        print(f"Error in list_problem query: {e}")
+        raise ValueError(f"Failed to retrieve QuestionInfo records: {e}")
