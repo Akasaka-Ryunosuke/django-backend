@@ -17,17 +17,19 @@ def question_info_create(request):
     """
     创建 QuestionInfo 记录
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            data = request.POST  # 获取 POST 数据
+            payload = json.loads(request.body)
+            question_id = payload.get("question_id")
+            question_raw = payload.get("question_raw")
             question_info = create_question_info(
-                question_id=data.get('question_id'),
-                question_raw=data.get('question_raw'),
-                checkpoints_count=data.get('checkpoints_count')
+                question_id=question_id,
+                question_raw=question_raw,
+                checkpoints_count=None
             )
-            return JsonResponse({"status": "success", "data": str(question_info)})
+            return ok(str(question_info))
         except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+            raise GlobalException(StatusCodeEnum.QUESTION_INFO_ERR)
 
 def question_info_list(request):
     """
@@ -92,8 +94,11 @@ def question_info_delete(request):
     """
     if request.method == 'DELETE':
         try:
-            filters = {key: value for key, value in request.GET.items()}
-            delete_question_info(**filters)
-            return JsonResponse({"status": "success"})
+            # 解析 JSON 请求体
+            body_unicode = request.body.decode('utf-8')
+            data = json.loads(body_unicode)
+            question_id = data.get('question_id')
+            QuestionInfo.objects.filter(question_id=question_id).delete()
+            return ok()
         except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+            raise GlobalException(StatusCodeEnum.QUESTION_INFO_ERR)
