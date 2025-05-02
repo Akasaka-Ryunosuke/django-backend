@@ -1,3 +1,5 @@
+import json
+
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -70,14 +72,17 @@ def question_info_update(request):
     """
     if request.method == 'PUT':
         try:
-            data = request.POST  # 获取 PUT 数据
+            # 解析 JSON 数据
+            body_unicode = request.body.decode('utf-8')
+            data = json.loads(body_unicode)
+
             filters = {"question_id": data.get("question_id")}
             updates = {
                 "question_raw": data.get("question_raw"),
                 "checkpoints_count": data.get("checkpoints_count")
             }
             update_question_info(filters=filters, updates=updates)
-            return JsonResponse({"status": "success"})
+            return ok()
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
