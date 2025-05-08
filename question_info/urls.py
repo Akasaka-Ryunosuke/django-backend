@@ -7,4 +7,5 @@ urlpatterns = [
     path('list', views.question_info_list, name='question_info_list'),
     path('update', views.question_info_update, name='question_info_update'),
     path('delete', views.question_info_delete, name='question_info_delete'),
+    path('submit', views.question_info_submit, name='question_info_submit'),
 ]

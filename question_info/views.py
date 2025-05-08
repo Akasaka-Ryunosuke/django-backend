@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from tmp.models import QuestionInfo
+from utils.code_test.code_test import submit_code
 from utils.enums import StatusCodeEnum
 from utils.exceptions import GlobalException
 from utils.paginator import MyPaginator
@@ -102,3 +103,22 @@ def question_info_delete(request):
             return ok()
         except Exception as e:
             raise GlobalException(StatusCodeEnum.QUESTION_INFO_ERR)
+
+
+@csrf_exempt
+def question_info_submit(request):
+    """
+    创建 QuestionInfo 记录
+    """
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body)
+            question_id = payload.get("question_id")
+            code = payload.get("code")
+            result_detail = submit_code(question_id, code)
+            answer = "评测结果: " + result_detail.get("status") + '\n'
+            answer += "通过测试点数: " + str(result_detail.get("pass")) + '/' + str(result_detail.get('all_test_size')) +  '\n'
+            return ok(answer)
+        except Exception as e:
+            raise GlobalException(StatusCodeEnum.QUESTION_INFO_ERR)
+
