@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "accounts",
     "question_info",
     "code_info",
+    "llm",
     "tmp"
 ]
 
