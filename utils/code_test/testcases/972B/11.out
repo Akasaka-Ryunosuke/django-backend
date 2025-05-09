@@ -1,7 +1,0 @@
-If it is right locally, it is right. If it is submitted to WA, it means that there is something wrong with OJ.
-SIGESGV is about an array out of bounds, and SIGFPE is about dividing by zero. You can Baidu for more details.
-PARDON?
-PARDON?
-May be dead loop, if it displays that process exited with return value 3221225477 or other non-zero number, you can search for the corresponding error message.
-May be dead loop, if it displays that process exited with return value 3221225477 or other non-zero number, you can search for the corresponding error message.
-You should debug it yourself first.

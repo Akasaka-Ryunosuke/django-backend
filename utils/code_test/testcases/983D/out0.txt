@@ -1,1 +1,0 @@
-!funtion(a,){"obet"==typeof module&&"oet"==typeof module.exports?module.exports=a.doument?(a,!0):funtion(a){if(!a.document)throw new Error("Query requires a window with a document");return (a)}:(a)}char lxnb[256] = {0}

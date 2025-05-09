@@ -1,8 +1,0 @@
-#include<stdio.h>
-int main(){
-	// consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	char ch = '//';
-	/*[Warning] multi-character character constant [-Wmultichar]
-	*/	
-	printf("/*Something wrong*/");
-}  

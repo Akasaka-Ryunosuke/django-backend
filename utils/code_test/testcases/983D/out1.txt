@@ -1,1 +1,0 @@
-all(a.onstrutor.prototype,"ivsrototypeOf")?!1:!0},isrmptyoect(c.ownerDocument&&(h=b.ownerDocument.getElementById())&&t(b,h)&&h.id===)

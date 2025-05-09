@@ -1,2 +1,0 @@
-45
-How_many_characters_does_this_string_contain?
