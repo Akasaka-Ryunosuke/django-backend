@@ -1,0 +1,8 @@
+#include<stdio.h>
+/* 
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+    tempor incididunt ut labore et dolore magna aliqua.
+*/
+int main(){ // consequat.
+	printf("hello, world!/* //");	
+} /* There is no end. What a pity!!!

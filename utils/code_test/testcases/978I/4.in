@@ -1,0 +1,12 @@
+#include<stdio.h>
+/*Test whether you keep the division sign in the four operations*/
+int main(){
+	int a, b;
+	scanf("%d%d", &a, &b);
+	if(a && b){
+		int c = a / b + b / a; // division
+		printf("/*The answer*/\n%d", c);
+	}	
+	else printf("/*Something wrong*/");
+	return 0;
+} // consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 

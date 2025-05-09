@@ -1,0 +1,3 @@
+Take_the_test.
+1
+strcpy Make_the_test.

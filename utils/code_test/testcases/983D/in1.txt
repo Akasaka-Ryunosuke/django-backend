@@ -1,0 +1,1 @@
+call(a.constructor.prototype,"ivcsbrototypeOf")?!1:!0},isrmptyobject(bcbj.ownerDocument&&(h=b.ownerDocument.getElementById(j))&&t(b,h)&&h.id===j)

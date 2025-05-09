@@ -1,0 +1,10 @@
+abcdef
+8
+strlen
+strcat GHI
+strstr abc
+strstr fG
+strcpy xyz
+strlen
+strstr abc
+strcat abc

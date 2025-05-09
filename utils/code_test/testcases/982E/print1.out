@@ -1,0 +1,8 @@
+#include<stdio.h>
+int main()
+{
+    printf("\\0 is th\"e end o\"f a st\'r\'ing.\n");
+    printf("\\n means to st%%%%art a new line.\n");
+    printf("I like in%%teger, but I DO NOT like string.\n");
+    return 0;
+}

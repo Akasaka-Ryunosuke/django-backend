@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+    printf("%%%%There are several escape charac\"ters in ANSI C, such as \\0, \\n, \\t, etc.\n");
+    printf("When we p%%%%ress the enter key, the input cha\'racters in Windows are \\r\\n, which is different in Linux.\n");
+    printf("In Linux, there is only a \\n.\n");
+    printf("My English is very poor. If there a\"\"re some mistakes in grammar, forget it.\n");
+    printf("Programming is an essential skill for college students.\n");
+    printf("It is 10 p.m. now. I DO NOT want to touch my graduation project.\n");
+    printf("%%%%\"\"\"\\\\\\\\\"\'\'\'\'\"\"\n");
+    printf("\\\\\\\\\\\\\\\\\\\\\n");
+    return 0;
+}

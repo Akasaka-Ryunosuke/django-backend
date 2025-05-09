@@ -1,0 +1,4 @@
+Hello!
+2
+strcat World!
+strcat Goodbye!

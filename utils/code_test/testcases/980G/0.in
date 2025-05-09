@@ -1,0 +1,10 @@
+double*p
+int(*ptr)[12]
+char**q
+int(*fp)(char,int)
+int(*p)[1]
+int(*f)()
+int*thelenthofnameisonehundredthelenthofnameisonehundredthelenthofnameisonehundredhahahahahahahahaha
+int(*buaa)(int,double,char,int,double,char,int,double,char,int,double,char,int,double,char,int,int)
+double(*p)(int,int,int,int,int,int,int,int,int,int,int)
+int(*a)[1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10][1][10]
