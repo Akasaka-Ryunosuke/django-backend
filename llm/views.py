@@ -1,10 +1,15 @@
-from django.http import JsonResponse
+import json
+
+from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from utils.result import ok
 from .models import LlmRecord, Detail
 from django.utils import timezone
 from rest_framework.decorators import api_view
-from django.forms.models import model_to_dict
+from code_info.models import CodeInfo
+from question_info.models import QuestionInfo
+from .chat import get_response
+from utils.exceptions import GlobalException,StatusCodeEnum
 
 
 # 1. 创建一个会话
@@ -47,19 +52,26 @@ def search_sessions(request):
 # 3. 根据会话 id 接收并添加会话内容，调用外部模型函数
 # 并将模型返回值存入相同会话，并返回模型返回值
 @csrf_exempt
-@api_view(['POST'])
 def add_session_detail(request):
-    data = request.data
+    data = json.loads(request.body.decode('utf-8'))
     llm_record_id = data.get('llm_record_id')
     raw = data.get('raw')
 
     if raw is None:
         return JsonResponse({'error': 'raw content is required'}, status=400)
 
+    messages = []
     try:
         session = LlmRecord.objects.get(llm_record_id=llm_record_id)
+        details = Detail.objects.filter(llm_record_id=llm_record_id).order_by('upload_time')
+        for detail in details:
+            if detail.io_type == 1:
+                messages.append({"role": "user", "content": detail.raw})
+            else:
+                messages.append({"role": "assistant", "content": detail.raw})
     except LlmRecord.DoesNotExist:
         return JsonResponse({'error': 'Session not found'}, status=404)
+    messages.append({"role": "user", "content": raw})
 
     # 保存用户输入
     Detail.objects.create(
@@ -69,19 +81,35 @@ def add_session_detail(request):
         upload_time=timezone.now()
     )
 
-    # 调用外部模型函数
-    # TODO
-    llm_response = "call external model"
+    question_info = QuestionInfo.objects.get(question_id=session.question_id)
+    question_raw = question_info.question_raw
+    try:
+        code_info = CodeInfo.objects.filter(user_id=session.user_id, question_id=session.question_id).order_by("upload_time").last()
+        code_raw = code_info.code_raw
+    except CodeInfo.DoesNotExist:
+        raise GlobalException(StatusCodeEnum.CODE_RAW_BLANK_ERR)
 
-    # 保存模型返回值
-    Detail.objects.create(
-        llm_record_id=llm_record_id,
-        io_type=0,
-        raw=llm_response,
-        upload_time=timezone.now()
+    def event_stream():
+        collected_chunks = []
+        # 调用流式生成器
+        for chunk in get_response(session.mode, messages, question_raw, code_raw):
+            collected_chunks.append(chunk)
+            # 使用SSE格式发送每个数据块
+            yield f"data: {json.dumps({'llm_response': chunk})}\n\n"
+
+        # 流式结束后保存完整响应到数据库
+        full_response = ''.join(collected_chunks)
+        Detail.objects.create(
+            llm_record_id=llm_record_id,
+            io_type=0,
+            raw=full_response,
+            upload_time=timezone.now()
+        )
+
+    return StreamingHttpResponse(
+        event_stream(),
+        content_type='text/event-stream'  # 使用SSE内容类型
     )
-
-    return ok({'llm_response': llm_response})
 
 
 # 4. 根据会话 id 查询会话内容
